@@ -1,0 +1,243 @@
+def deal_with_waitting(self):
+        car_position_in_route = self.simple_route_coor.index(self.position)
+        
+        for i in range(car_position_in_route + 1, car_position_in_route + 1 + self.front_locked_length):
+            if self.information_route[i].get_locked_status() == 'locked' and self.information_route[i].get_passing_car() != self.car_num:
+                '''
+                self.next_action.clear()
+                self.next_action.append('STOP')
+                '''
+                if self.car_num not in self.information_route[i].get_waitting_car():
+                    self.information_route[i].add_waitting_car(self.car_num)
+                break
+
+
+            elif self.simple_route_coor[i] == self.destination:
+                self.waitting_of_busy = False
+                self.car_planner_stage = 3
+
+                self.next_action.clear()
+                for ii in range(car_position_in_route + 1, i + 1):
+                    self.next_action.append(self.route_with_orie[ii])
+                break
+                    
+            elif self.information_route[i].get_locked_status() == 'unlocked':
+                self.information_route[i].rewrite_locked_staus('locked')
+                self.information_route[i].update_passing_car(self.car_num)
+            
+        else:
+            self.waitting_of_busy = False
+            self.next_action.clear()
+            for i in range(car_position_in_route + 1, car_position_in_route + 1 + self.front_locked_length):
+                self.next_action.append(self.route_with_orie[i]) 
+
+
+
+
+
+
+
+
+
+    for i in range(car_position_in_route + 1, car_position_in_route + 1 + self.front_locked_length):
+            if self.information_route[i].get_locked_status() == 'locked' and self.information_route[i].get_passing_car() != self.car_num:
+                '''
+                self.next_action.clear()
+                self.next_action.append('STOP')
+                '''
+                if self.car_num not in self.information_route[i].get_waitting_car():
+                    self.information_route[i].add_waitting_car(self.car_num)
+                break
+
+            
+            elif self.information_route[i] == 'locked':
+                if self.simple_route_coor[i] == self.destination:
+                    self.waitting_of_busy = False
+                    self.car_planner_stage = 3
+
+                    self.next_action.clear()
+                    for ii in range(car_position_in_route + 1, i + 1):
+                        self.next_action.append(self.route_with_orie[ii])
+                    break
+
+            else:
+                 if self.simple_route_coor[i] == self.destination:
+                    self.information_route[i].rewrite_locked_staus('locked')
+                    self.information_route[i].update_passing_car(self.car_num)
+                    self.waitting_of_busy = False
+                    self.car_planner_stage = 3
+
+                    self.next_action.clear()
+                    for ii in range(car_position_in_route + 1, i + 1):
+                        self.next_action.append(self.route_with_orie[ii])
+                    break
+
+            
+        else:
+            self.waitting_of_busy = False
+            self.next_action.clear()
+            for i in range(car_position_in_route + 1, car_position_in_route + 1 + self.front_locked_length):
+                self.next_action.append(self.route_with_orie[i]) 
+
+
+
+'''
+        # when car get the goal, it means comleted the route, next release the locked landmark
+        if car_position_in_route == len(self.simple_route_coor):
+            self.car_planner_stage = 3
+            for i in range()
+
+
+        if car_position_in_route == len(self.simple_route_coor):
+            self.car_planner_stage = 3
+            for i in range(car_position_in_route - 1):
+                update_psssed_landmark()
+
+
+        if self.is_long_route == False:
+            if len(self.simple_route_coor) <= self.front_locked_length + 1:
+                if car_position_in_route == 0: # agv is now at route[0] 
+                    self.information_route[0].rewrite_locked_status('locked')
+                    self.information_route[0].update_passing_car(self.car_num)
+                    for i in range(1, len(self.simple_route_coor)):
+                        if self.information_route[i].get_locked_status() == 'locked' and \
+                           self.information_route[i].get_passing_car() != self.car_num:
+                            self.next_action.clear()
+                            self.next_action.append('STOP')
+                            self.information_route[i].add_waitting_car(self.car_num)
+                            break
+                        else:
+                            self.information_route[i].rewrite_locked_status('locked')
+                            self.information_route[i].update_passing_car(self.car_num)
+
+                    else:
+                        self.next_action.clear() 
+                        for i in range(1, len(self.simple_route_coor)):# agv's next action
+                            self.next_action.append(self.route_with_orie[i])
+
+                
+
+
+        elif len(self.simple_route_coor) == 1:
+            pass
+
+        elif len(self.simple_route_coor) == self.locked_total_length + 1:
+            if self.information_route[self.locked_total_length].get_locked_status() == 'unlocked':
+                self.information_route[self.locked_total_length].rewrite_locked_status('locked')
+                self.information_route[self.locked_total_length].update_passing_car(self.car_num)
+                self.next_action.pop(0)
+                self.next_action.append(self.route_with_orie[self.locked_total_length])
+                if len(self.information_route[0].get_waitting_car()) == 0:
+                    self.information_route[0].rewrite_locked_status('unlocked')
+                    self.information_route[0].update_passing_car(None)
+                    self.release_landmark()
+                else:
+                    self.information_route[0].update_passing_car(self.information_route[0].pop_waitting_car())
+                    self.release_landmark()
+
+        elif len(self.simple_route_coor) > self.locked_total_length + 1:
+
+            car_position_in_route = self.simple_route_coor.index(self.position)
+            
+            if car_position_in_route == self.back_locked_length + 1:
+                #need pop route mark
+                pass 
+
+            # Initialize the route information
+            else:
+                #for car_position in range(self.back_locked_length + 1):
+                if car_position_in_route == 0: # agv is now at route[0] 
+                    self.information_route[0].rewrite_locked_status('locked')
+                    self.information_route[0].update_passing_car(self.car_num)
+                    for i in range(1,self.front_locked_length+1):
+                        if self.information_route[i].get_locked_status() == 'locked':
+                            self.next_action.clear()
+                            self.next_action.append('STOP')
+                            self.information_route[i].add_waitting_car(self.car_num)
+                            break
+                        else:
+                            self.information_route[i].rewrite_locked_status('locked')
+                            self.information_route[i].update_passing_car(self.car_num)
+
+                    else:
+                        self.next_action.clear() 
+                        for i in range(1, self.front_locked_length+1):# agv's next action
+                            self.next_action.append(self.route_with_orie[i])
+
+                else: # 0 < agv's location < self.back_locked_length + 1,   in route
+                    if self.information_route[car_position_in_route + self.front_locked_length].get_locked_status() == 'locked':
+                        self.next_action.clear()
+                        self.next_action.append('STOP')
+                    else:
+                        self.information_route[car_position_in_route + self.front_locked_length].rewrite_locked_status('locked')
+                        self.information_route[car_position_in_route + self.front_locked_length].update_passing_car(self.car_num)
+                        self.next_action.pop(0)
+                        self.next_action.append(self.route_with_orie[car_position_in_route + self.front_locked_length])
+            
+            '''initialize over'''
+
+'''
+
+'''
+            elif self.information_route[i].get_locked_status() == 'locked' and self.information_route[i].get_passing_car() == self.car_num:
+                if self.simple_route_coor[i] == self.destination:
+                    self.car_planner_stage = 3
+
+                    self.next_action.clear()
+                    for ii in range(car_position_in_route + 1, i + 1):
+                        self.next_action.append(self.route_with_orie[ii])
+                    break
+
+            elif self.information_route[i].get_locked_status() == 'unlocked':
+                self.information_route[i].rewrite_locked_status('locked')
+                self.information_route[i].update_passing_car(self.car_num)
+                if self.simple_route_coor[i] == self.destination:
+                    self.car_planner_stage = 3
+
+                    self.next_action.clear()
+                    for ii in range(car_position_in_route + 1, i + 1):
+                        self.next_action.append(self.route_with_orie[ii])
+                    break
+'''
+
+    def update_route(self):
+        p_x = self.position[0]
+        p_y = self.position[1]
+        if len(self.route_with_orie) != 0:
+            for offset in range(len(self.route_with_orie)):
+                route_x = self.route_with_orie[offset][0]
+                route_y = self.route_with_orie[offset][1]
+                if p_x == route_x and p_y == route_y:
+                    if offset == 0:
+                        for i in range(self.locked_total_length - 1):
+                            map_x = self.route_with_orie[i][0]
+                            map_y = self.route_with_orie[i][1]
+                            information_map[map_x][map_y].rewrite_locked_status('locked')
+                            information_map[map_x][map_y].update_passing_car(self.car_num)
+                    elif offset == 1:
+                        for i in range(self.locked_total_length):
+                            map_x = self.route_with_orie[i][0]
+                            map_y = self.route_with_orie[i][1]
+                            information_map[map_x][map_y].rewrite_locked_status('locked')
+                            information_map[map_x][map_y].update_passing_car(self.car_num)
+                    else:
+                        for i in range(offset-1):
+                            map_x = self.route_with_orie[i][0]
+                            map_y = self.route_with_orie[i][1]
+                            information_map[map_x][map_y].rewrite_locked_status('unlocked')
+                            information_map[map_x][map_y].update_passing_car(None)
+                            self.route_with_orie.pop(0)
+
+
+def update_coming_landmark2(self, index):
+        if self.information_route[index].get_locked_status() == 'locked' and \
+           self.information_route[index].get_passing_car() != self.car_num:
+            self.waitting_of_busy = True
+            self.next_action = ['STOP']
+            if self.car_num not in self.information_route[index].get_waitting_car():
+                self.information_route[index].add_waitting_car(self.car_num)
+        else:
+            self.information_route[index].rewrite_locked_status('locked')
+            self.information_route[index].update_passing_car(self.car_num)
+            if self.simple_route_coor[index] == self.destination:
+                self.car_planner_stage = 3
